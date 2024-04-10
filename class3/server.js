@@ -36,6 +36,13 @@ app.post('/products', (req, res)=>{
     res.send("post")
 })
 
+app.delete('/products/:id', (req, res)=>{
+    const id = req.params.id
+    const productIndex = products.findIndex((ele)=> ele.id==id)
+    products.splice(productIndex,1)
+    res.send("product deleted")
+})
+
 
 app.listen(port,()=>{
     console.log(`server is listing at ${port}`)
