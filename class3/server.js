@@ -43,6 +43,21 @@ app.delete('/products/:id', (req, res)=>{
     res.send("product deleted")
 })
 
+app.patch('/products/:id', (req, res)=>{
+    const id = req.params.id
+    const productIndex = products.findIndex((ele)=>ele.id==id);
+    const product = products[productIndex];
+    products.splice(productIndex,1,{...product,...req.body})
+    res.send("updating the existing key")
+})
+
+app.put('/products/:id', (req, res)=>{
+    const id =req.params.id
+    const productIndex = products.findIndex((ele)=>ele.id==id);
+    products[productIndex] = req.body
+    res.send("updating the exsiting key")
+
+})
 
 app.listen(port,()=>{
     console.log(`server is listing at ${port}`)
