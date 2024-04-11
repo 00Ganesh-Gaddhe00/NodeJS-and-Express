@@ -8,25 +8,15 @@ const {getallproducts, getsingleproduct,
 
 const port = 8081
 const app = express();
+const productrouter = require("./routes/productsRTS.js")
+
 
 
 
 
 app.use(express.json())
 
-app.get('/products',getallproducts)
-
-app.get('/products/:id',getsingleproduct)
-
-
-app.post('/products', addproducts)
-
-app.delete('/products/:id', deleteproducts )
-
-app.patch('/products/:id', patchdata)
-
-app.put('/products/:id',putdata)
-
+app.use('/products', productrouter )
 
 
 app.listen(port,()=>{
