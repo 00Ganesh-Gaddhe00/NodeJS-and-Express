@@ -1,63 +1,33 @@
 const express = require("express");
 const fs = require("fs")
 
+const {getallproducts, getsingleproduct,
+       addproducts, deleteproducts,
+        patchdata, putdata} = require("./controllers/productsctrl.js");
 
-const port = 8082
+
+const port = 8081
 const app = express();
 
-const data = JSON.parse(fs.readFileSync("../class3/data.json", 'utf-8'))
-// console.log(data)
-const products = data.products
 
 
-console.log(products);
-app.get('/', (req,res)=>{
-    res.send("dummy jason data")
-})
 
-app.get('/products', (req, res)=>{
-    res.send(products)
-})
+app.use(express.json())
 
-app.get('/products/:id', (req, res)=>{
-    //console.log(req.params)//req.params is an object
-     const id = req.params.id
-    const product = products.find((ele)=>ele.id==id)
+app.get('/products',getallproducts)
 
-    if(!product)res.send("No product present with the given id")
-    else res.send(product);
-})
+app.get('/products/:id',getsingleproduct)
 
-app.use(express.json())//parse incoming JSON requests
 
-app.post('/products', (req, res)=>{
-    //console.log(req.body)
-    products.push(req.body)
-    res.send("post")
-})
+app.post('/products', addproducts)
 
-app.delete('/products/:id', (req, res)=>{
-    const id = req.params.id
-    const productIndex = products.findIndex((ele)=> ele.id==id)
-    products.splice(productIndex,1)
-    res.send("product deleted")
-})
+app.delete('/products/:id', deleteproducts )
 
-app.patch('/products/:id', (req, res)=>{
-    const id = req.params.id
-    const productIndex = products.findIndex((ele)=>ele.id==id);
-    const product = products[productIndex];
-    products.splice(productIndex,1,{...product,...req.body})
-    res.send("updating the existing key")
-})
+app.patch('/products/:id', patchdata)
 
-app.put('/products/:id', (req, res)=>{
-    const id =req.params.id
-    const productIndex = products.findIndex((ele)=>ele.id==id);
-    products[productIndex] = req.body
-    res.send("updating the exsiting key")
+app.put('/products/:id',putdata)
 
-})
+
 
 app.listen(port,()=>{
     console.log(`server is listing at ${port}`)
